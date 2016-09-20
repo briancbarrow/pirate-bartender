@@ -46,7 +46,9 @@ $(document).ready(function() {
 
   var myDrink = {
     renderQuestion: function() {
-      $('#question').text(myQuestions.questions[myQuestions.counter].question);
+      if(myQuestions.counter < myQuestions.questions.length){
+        $('#question').text(myQuestions.questions[myQuestions.counter].question);
+      }
     },
     getRandomNumber: function(length) {
       Math.floor(Math.random() * length);
@@ -56,9 +58,20 @@ $(document).ready(function() {
   $('#yes').click(function(){
     var name = myQuestions.questions[myQuestions.counter].name;    
     var length = myPantry[name].ingredients.length;
+    var randNum = Math.floor(Math.random() * length);
+    myQuestions.questions[myQuestions.counter].answer = myPantry[name].ingredients[randNum];
+    console.log(myQuestions.questions[myQuestions.counter].answer);
+    myQuestions.counter++;
+    myDrink.renderQuestion();
+  });
+  $('#no').click(function(){
+    var name = myQuestions.questions[myQuestions.counter].name;    
+    var length = myPantry[name].ingredients.length;
     var randNum = myDrink.getRandomNumber(length);
-    myQuestions.questions[myQuestions.counter].answer = true;
+    myQuestions.questions[myQuestions.counter].answer = false;
     console.log(myQuestions.questions);
+    myQuestions.counter++;
+    myDrink.renderQuestion();
   });
   
   myDrink.renderQuestion();
