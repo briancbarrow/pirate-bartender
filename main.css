@@ -14,3 +14,7 @@ main {
 button {
   font-size: 15px;
 }
+
+#yes, #no {
+  display: none;
+}
