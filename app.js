@@ -1,12 +1,4 @@
 $(document).ready(function() {
-  // var Pantry = function(strong, salty, bitter, sweetness, fruity) {
-  //   this.strong = strong;
-  //   this.salty = salty;
-  //   this.bitter = bitter;
-  //   this.sweetness = sweetness;
-  //   this.fruity = fruity;
-  // };
-
   var Pantry = function() {
     this.ingredients = {};
     this.addToPantry = function(ingredient) {
@@ -29,23 +21,10 @@ $(document).ready(function() {
     this.name = name;
   }
 
-  // Pantry.prototype.addToPantry = function(ingredient, type) {
-  //     if(this[type]) {
-  //       this[type].push(ingredient);
-  //     } else {
-  //       this[type] = new Ingredients([ingredient]);
-  //     }
-  //   };
-
-  // var Ingredients = function(ingredients) {
-  //   this.ingredients = ingredients;
-  // }
-
   var Questions = function(pantry, typeArr) {
     this.questions = {};
     for(i = 0; i < typeArr.length; i++) {
       this.questions[typeArr[i]] = 'Do you like your drink ' + typeArr[i];
-      // this.questions[typeArr[i]].push('Do you like your drink ' + typeArr[i]);
     }
   };
 
@@ -125,7 +104,6 @@ $(document).ready(function() {
     }
   });
   
-  // myPantry.addToPantry('water', 'test')
   bartender.renderQuestion();
 
 });
