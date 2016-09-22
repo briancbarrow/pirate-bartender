@@ -44,23 +44,17 @@ $(document).ready(function() {
   var Questions = function(pantry, typeArr) {
     this.questions = {};
     for(i = 0; i < typeArr.length; i++) {
-      this.questions[typeArr[i]] = [];
-      this.questions[typeArr[i]].push('Do you like your drink ' + typeArr[i]);
+      this.questions[typeArr[i]] = 'Do you like your drink ' + typeArr[i];
+      // this.questions[typeArr[i]].push('Do you like your drink ' + typeArr[i]);
     }
-      // for(property in pantry.ingredients) {
-      //   this.questions[property] = [];
-      //   // this.questions.type = [];
-      //   this.questions[property].push('Do you like your drink ' + property);
-      // };
   };
 
-  var Drink = function(ingredients) {
+  var Drink = function(length) {
     this.adjectives = ['Limey', 'Ruthless', 'Marooned', 'Pillaging', 'Swashbuckling'];
     this.nouns = ['Walk the Plank', 'Ruffian', 'Treasure Island', 'Galleon', 'Port'];
     var randNumAdj = Math.floor(Math.random() * length);
     var randNumNoun = Math.floor(Math.random() * length);
     var drink = '"' + this.adjectives[randNumAdj] + ' ' + this.nouns[randNumNoun] + '"';
-    // console.log(drink)
     $('#question').text('Enjoy yer ' + drink);
   };
 
@@ -74,17 +68,21 @@ $(document).ready(function() {
   var Bartender = function(pantry, typeArr) {
     this.ingredients = {};
     for(i = 0; i < typeArr.length; i++) {
-      this.ingredients[typeArr[i]] = [];
-      // this.ingredients[typeArr[i]].push(pantry.ingredients[typeArr[i]])
       this.ingredients[typeArr[i]] = pantry.ingredients[typeArr[i]]
     }
-    var questionCounter = 0;
-    this.questions = new Questions(pantry, typeArr)
+    this.questionCounter = 0;
+    this.questionList = new Questions(pantry, typeArr)
+    this.questionsLength = Object.keys(this.questionList.questions).length
+    this.propertyArray = Object.keys(this.questionList.questions)
     this.renderQuestion = function() {
-      if(this.questionCounter < Object.keys(this.questions).length) {
-        $('#question').text(this.questions[this.questionCounter].question);
+      this.name = this.propertyArray[this.questionCounter];
+      if(this.questionCounter < Object.keys(this.questionList.questions).length) {
+        $('#question').text(this.questionList.questions[typeArr[this.questionCounter]]);
       }
     };
+    this.makeDrink = function(preferencesLength) {
+      new Drink(preferencesLength);
+    }
   }
 
   var strongIngredients = new Ingredient('strong', ['Glug of rum', 'slug of whisky', 'splash of gin']);
@@ -99,25 +97,18 @@ $(document).ready(function() {
   myPantry.addToPantry(bitterIngredients);
   myPantry.addToPantry(sweetIngredients);
   myPantry.addToPantry(fruityIngredients);
-  console.log(myPantry)
-  // console.log(myPantry.ingredients.bitter[0])
-
-  // var myQuestions = new Questions(myPantry, ['strong', 'bitter', 'fruity']);
-  // console.log(Object.keys(myQuestions.questions).length);
 
   var bartender = new Bartender(myPantry, ['strong', 'salty', 'bitter', 'sweet', 'fruity']);
-  console.log(bartender.questions)
-  // var myPreferences = new Preferences();
+  var myPreferences = new Preferences();
 
   $('#yes').click(function(){
-    var name = bartender.questions[questionCounter].name;    
-    var length = myPantry[name].ingredients.length;
-    var randNum = Math.floor(Math.random() * length);
-    myPreferences.addPreference(myPantry[name].ingredients[randNum]);
-    console.log(myQuestions.questions[myQuestions.counter].name);
-    console.log(myPreferences.preferences.length)
-    myQuestions.counter++;
-    if(myQuestions.counter >= myQuestions.questions.length) {
+    var name = bartender.name;  
+    var ingLength = Object.keys(bartender.ingredients).length;
+    
+    var randNum = Math.floor(Math.random() * ingLength);
+    myPreferences.addPreference(bartender.ingredients[name][0][randNum]);
+    bartender.questionCounter++;
+    if(bartender.questionCounter >= bartender.questionsLength) {
       $('button').hide();
       bartender.makeDrink(myPreferences.preferences.length)
     } else {
@@ -125,8 +116,8 @@ $(document).ready(function() {
     }    
   });
   $('#no').click(function(){
-    myQuestions.counter++;
-    if(myQuestions.counter >= myQuestions.questions.length) {
+    bartender.questionCounter++;
+    if(bartender.questionCounter >= bartender.questionsLength) {
       $('button').hide();
       bartender.makeDrink(myPreferences.preferences.length)
     } else {
@@ -136,6 +127,5 @@ $(document).ready(function() {
   
   // myPantry.addToPantry('water', 'test')
   bartender.renderQuestion();
-  // console.log(myPreferences)
 
 });
