@@ -59,7 +59,7 @@ $(document).ready(function() {
     this.questionsLength = Object.keys(this.questionList.questions).length
     this.propertyArray = Object.keys(this.questionList.questions)
     this.renderQuestion = function() {
-      this.name = this.propertyArray[this.questionCounter];
+      this.ingName = this.propertyArray[this.questionCounter];
       if(this.questionCounter < Object.keys(this.questionList.questions).length) {
         $('#question').text(this.questionList.questions[typeArr[this.questionCounter]]);
         $('#burger, #drink').hide();
@@ -71,7 +71,6 @@ $(document).ready(function() {
       this.item.adjectives = this.adjectives;
       this.item.nouns = this.nouns;
       this.item.displayItem();
-      console.log(this.item.display)
     };
   };
 
@@ -99,10 +98,17 @@ $(document).ready(function() {
   myPantry.addToPantry(sauceIngredients);
 
   var bartender = new Worker(myPantry, ['strong', 'salty', 'bitter', 'sweet', 'fruity'], 'Do you like your drink ');
+    bartender.product = 'drink';
+    bartender.adjectives = ['Limey', 'Ruthless', 'Marooned', 'Pillaging', 'Swashbuckling'];
+    bartender.nouns = ['Walk the Plank', 'Ruffian', 'Treasure Island', 'Galleon', 'Port'];
   var chef = new Worker(myPantry, ['meat', 'lettuce', 'tomato', 'cheese', 'sauce'], 'Do you like your burger with ')
+    chef.product = 'burger';
+    chef.adjectives = ['Mighty', 'Ruthless', "Dead Man's", 'Pillaging', 'Big'];
+    chef.nouns = ['Mouth', 'Vesssel', 'Treasure', 'Scoundrel', 'Kahuna'];
   var myPreferences = new Preferences();
   var worker;
   var customerName;
+  var customer;
   
 
   $('#customer-info').submit(function(e) {
@@ -112,59 +118,68 @@ $(document).ready(function() {
     $('#customer-info').hide();
     if(Object.keys(customers).length > 0) {
       for(property in customers) {
-        console.log(property)
         if(property === customerName) {
           nameCheck = true;
-          // console.log(customers);
           break;
         } else {
           nameCheck = false;
         }
       }
-    }
-    
+    }    
     
     if(customerName !== null) {
       if(nameCheck === false) {
         $('#burger, #drink, #question').show();
         customer = new Customer(customerName);
         customers[customerName] = customer;
-        console.log(customers);
-        console.log(customers[customerName].name);
-        console.log(Object.keys(customers).length);
       } else {
-        $('#question').text('Hi ' + customers[customerName].name + ', do you want your usual?')
-        $('#question').show();
+        $('#question').text('Hi ' + customers[customerName].name + ', do you want your usual?');
+        $('#question').append('<div class="usual-cont"></div>')
+        if(customers[customerName].drink) {
+          $('.usual-cont').append('<p>Drink: ' + customers[customerName].drink.name)
+        }
+        if(customers[customerName].burger) {
+          $('.usual-cont').append('<p>Burger: ' + customers[customerName].burger.name)
+        }
+        $('#question, #returnYes, #returnNo').show();
       }
     }
   });
 
+  $('#returnYes').click(function() {
+    $('#question').text('Coming right up ' + customers[customerName].name);
+    $('#returnYes, #returnNo').hide();
+    $('#new').show();
+  });
+  $('#returnNo').click(function() {
+    $('#question').text('Do ye want a burger or a drink?');
+    $('#returnYes, #returnNo').hide();
+    $('#burger, #drink').show();
+  });
+
   $('#burger').click(function() {
     worker = chef;
-    worker.product = 'burger';
-    chef.adjectives = ['Mighty', 'Ruthless', "Dead Man's", 'Pillaging', 'Big'];
-    chef.nouns = ['Mouth', 'Vesssel', 'Treasure', 'Scoundrel', 'Kahuna'];
-    worker.renderQuestion();
+    chef.renderQuestion();
   });
   $('#drink').click(function() {
     worker = bartender;
-    worker.product = 'drink';
-    bartender.adjectives = ['Limey', 'Ruthless', 'Marooned', 'Pillaging', 'Swashbuckling'];
-    bartender.nouns = ['Walk the Plank', 'Ruffian', 'Treasure Island', 'Galleon', 'Port'];
-    worker.renderQuestion();
+    bartender.renderQuestion();
   });
 
   $('#yes').click(function() {
-    var ingName = worker.name;  
-    var ingLength = Object.keys(worker.ingredients).length;    
+    var ingName = worker.ingName;  
+    var ingLength = worker.ingredients[ingName].length;    
     var randNum = Math.floor(Math.random() * ingLength);
     myPreferences.addPreference(worker.ingredients[ingName][0][randNum]);
     worker.questionCounter++;
     if(worker.questionCounter >= worker.questionsLength) {
       $('#yes, #no').hide();
       worker.makeItem(myPreferences.preferences.length);
-      customers[customerName][worker.product] = worker.item.display;
-      console.log(customers);
+      customers[customerName][worker.product] = {};
+      customers[customerName][worker.product].name = worker.item.display;
+      customers[customerName][worker.product].preferences = myPreferences.preferences;
+      myPreferences = new Preferences();
+      worker.questionCounter = 0;
       $('#new').show();
     } else {
       worker.renderQuestion();
@@ -175,7 +190,10 @@ $(document).ready(function() {
     if(worker.questionCounter >= worker.questionsLength) {
       $('#yes, #no').hide();
       worker.makeItem(myPreferences.preferences.length)
-      customers[customerName][worker.product] = worker.item.display;
+      customers[customerName][worker.product] = {};
+      customers[customerName][worker.product].name = worker.item.display;
+      customers[customerName][worker.product].preferences = myPreferences.preferences;
+      myPreferences = new Preferences();
       $('#new').show();
     } else {
       worker.renderQuestion();
@@ -183,9 +201,8 @@ $(document).ready(function() {
   });
   $('#new').click(function() {
     $('#question').hide();
+    $('#question').text('Do ye want a burger or a drink?');
     $('#new').hide();
     $('#customer-info').show();
   })
-  // console.log(customers.length)
-  // console.log(customers)
 });

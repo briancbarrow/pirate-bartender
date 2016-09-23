@@ -26,7 +26,7 @@ input {
   margin-top: 10px;
 }
 
-#yes, #no, #burger, #drink, #new {
+#yes, #no, #burger, #drink, #new, #returnYes, #returnNo{
   display: none;
   margin-top: 10px;
 }
@@ -34,4 +34,13 @@ input {
 #question {
   display: none;
   margin-top: 17px;
+}
+
+.usual-cont {  
+  margin-top: 10px;
+}
+
+p {
+  font-size: 25px;
+  margin: 0;
 }
