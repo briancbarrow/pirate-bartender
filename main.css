@@ -1,0 +1,46 @@
+body {
+  background-color: #D8DBE2;
+  font-family: 'Pirata One', cursive;
+}
+
+main {
+  text-align: center;
+}
+
+#question {
+  font-size: 30px;
+}
+
+button {
+  font-size: 15px;
+}
+
+label {
+  margin-top: 17px;
+  font-size: 30px;
+  display: block;
+  font-weight: 500;
+}
+
+input {
+  margin-top: 10px;
+}
+
+#yes, #no, #burger, #drink, #new, #returnYes, #returnNo{
+  display: none;
+  margin-top: 10px;
+}
+
+#question {
+  display: none;
+  margin-top: 17px;
+}
+
+.usual-cont {  
+  margin-top: 10px;
+}
+
+p {
+  font-size: 25px;
+  margin: 0;
+}
