@@ -1,0 +1,22 @@
+{
+  "name": "pirate-bartender",
+  "version": "1.0.0",
+  "description": "Pirate Bartender Project",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/briancbarrow/pirate-bartender.git"
+  },
+  "author": "Brian Barrow",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/briancbarrow/pirate-bartender/issues"
+  },
+  "homepage": "https://github.com/briancbarrow/pirate-bartender#readme",
+  "dependencies": {
+    "jquery": "^3.1.1"
+  }
+}
